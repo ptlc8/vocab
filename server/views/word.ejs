@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<%= base %>/style.css">
+    <title><%= word.text %></title>
+</head>
+<body>
+    <h1><%= word.text %></h1>
+    <p><b>Difficulté :</b> <%= word.difficulty %></p>/5
+    <p><b>Registre :</b> <%= word.register %></p>
+    <p><b>Définition courte :</b> <%= word.short_definition %></p>
+    <p><b>Définition longue :</b> <%= word.long_definition %></p>
+    <p><b>Origine :</b> <%= word.origin %></p>
+    <p><b>Notes :</b> <%= word.notes %></p>
+    <p><b>Création :</b> <time datetime="<%= word.created_at.toISOString() %>"><%= word.created_at.toLocaleString(locale) %></time></p>
+    <p><b>Modification :</b> <time datetime="<%= word.updated_at.toISOString() %>"><%= word.updated_at.toLocaleString(locale) %></time></p>
+    <p><b>Catégories :</b>
+        <ul>
+        <% word.categories.forEach(category => { %>
+            <li><%= category.name %></li>
+        <% }); %>
+        </ul>
+    </p>
+    <p><b>Exemples :</b> 
+        <ul>
+        <% word.examples.forEach(example => { %>
+            <li><%= example.sentence %></li>
+        <% }); %>
+        </ul>
+    </p>
+    <p><b>Mots proches :</b>
+        <ul>
+        <% word.near_words.forEach(nearWord => { %>
+            <li><a href="<%= base %>/words/<%= nearWord.id %>"><%= nearWord.text %></a></li>
+        <% }); %>
+        </ul>
+    </p>
+    <p><b>Mots confusables :</b>
+        <ul>
+        <% word.confusions.forEach(confusion => { %>
+            <li><a href="<%= base %>/words/<%= confusion.id %>"><%= confusion.text %></a> (<%= confusion.nuance %>)</li>
+        <% }); %>
+        </ul>
+    </p>
+</body>
+</html>

@@ -1,0 +1,29 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --link-color: #1a0dab;
+    --header-bg-color: #f1f1f1;
+    --header-text-color: #000000;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --link-color: #8ab4f8;
+        --header-bg-color: #1f1f1f;
+        --header-text-color: #e0e0e0;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0 20px;
+}
+
+a {
+    color: var(--link-color);
+}
