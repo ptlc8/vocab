@@ -43,7 +43,7 @@ app.get('/words/:word', async (req, res) => {
 });
 
 // 404 handler
-app.use((req, res, next) => {
+app.use((req, res, _next) => {
     res.status(404).render('error', { message: 'Page non trouvée' });
 });
 
@@ -58,7 +58,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
     console.error(err);
     res.status(500).render('error', { message: 'Erreur interne du serveur' });
 });

@@ -1,13 +1,12 @@
 import { queryDatabase } from './database.js';
 
 export async function getWords() {
-    let rows = await queryDatabase('SELECT id, text FROM word');
-    return rows;
+    return queryDatabase('SELECT id, text FROM word');
 }
 
 export async function getWord(wordId) {
     const wordRows = await queryDatabase('SELECT * FROM word WHERE id = $1', [wordId]);
-    if (wordRows.length == 0) return null;
+    if (wordRows.length === 0) return null;
     const word = wordRows[0];
     const categoriesRows = await queryDatabase(
         `SELECT c.id, c.name FROM word_category wc

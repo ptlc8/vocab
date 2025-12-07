@@ -4,7 +4,7 @@ const apiKey = process.env.MISTRAL_API_KEY;
 
 const client = new Mistral({ apiKey: apiKey });
 
-var lastAPICallTime = 0;
+let lastAPICallTime = 0;
 
 export async function complete(question) {
     while (Date.now() - lastAPICallTime < 1200) {
@@ -12,7 +12,7 @@ export async function complete(question) {
     }
     lastAPICallTime = Date.now();
 
-    var chatResponse;
+    let chatResponse;
     do
         try {
             chatResponse = await client.chat.complete({
