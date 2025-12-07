@@ -24,4 +24,4 @@ export const Difficulties = {
         color: '#f44336',
         description: 'Terme savant, technique, abscons, ou de registre académique',
     },
-}
+};

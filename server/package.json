@@ -1,18 +1,23 @@
 {
-  "name": "vocab",
-  "version": "0.1.0",
-  "description": "Learn vocabulary",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Ambi",
-  "license": "ISC",
-  "dependencies": {
-    "@mistralai/mistralai": "^1.6.0",
-    "ejs": "^3.1.10",
-    "express": "^5.1.0",
-    "pg": "^8.15.5"
-  }
+    "name": "vocab",
+    "version": "0.1.0",
+    "description": "Learn vocabulary",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "test": "npm run format",
+        "format": "prettier --check .",
+        "format:fix": "prettier --write ."
+    },
+    "author": "Ambi",
+    "license": "ISC",
+    "dependencies": {
+        "@mistralai/mistralai": "^1.6.0",
+        "ejs": "^3.1.10",
+        "express": "^5.1.0",
+        "pg": "^8.15.5"
+    },
+    "devDependencies": {
+        "prettier": "^3.7.4"
+    }
 }

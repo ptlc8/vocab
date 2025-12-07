@@ -1,6 +1,5 @@
 import { Pool } from 'pg';
 
-
 const pool = new Pool({
     host: process.env.POSTGRES_HOSTNAME,
     port: 5432,
@@ -8,7 +7,6 @@ const pool = new Pool({
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DBNAME,
 });
-
 
 export async function queryDatabase(query, values = undefined) {
     const client = await pool.connect();

@@ -2,7 +2,6 @@ import Express from 'express';
 import * as Vocab from './vocab.js';
 import { Difficulties } from './difficulties.js';
 
-
 const port = process.env.PORT ?? '80';
 
 const app = Express();
@@ -16,11 +15,10 @@ app.locals.difficulties = Difficulties;
 
 // Locale middleware
 app.use((req, res, next) => {
-  const langs = req.acceptsLanguages();
-  res.locals.locale = langs && langs.length ? langs[0] : 'fr';
-  next();
+    const langs = req.acceptsLanguages();
+    res.locals.locale = langs && langs.length ? langs[0] : 'fr';
+    next();
 });
-
 
 // Homepage route
 app.get('/', (req, res) => {
@@ -37,18 +35,17 @@ app.get('/words', async (req, res) => {
 app.get('/words/:word', async (req, res) => {
     const wordId = req.params.word || '';
     const word = await Vocab.getWord(wordId);
-    if (word)
+    if (word) {
         res.render('word', { word });
-    else
+    } else {
         res.status(404).render('error', { message: 'Mot non trouvé' });
+    }
 });
-
 
 // 404 handler
 app.use((req, res, next) => {
     res.status(404).render('error', { message: 'Page non trouvée' });
 });
-
 
 // Error handling
 app.use((req, res, next) => {
@@ -65,7 +62,6 @@ app.use((err, req, res, next) => {
     console.error(err);
     res.status(500).render('error', { message: 'Erreur interne du serveur' });
 });
-
 
 // Start server
 app.listen(port, err => {
