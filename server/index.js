@@ -1,5 +1,6 @@
 import Express from 'express';
 import * as Vocab from './vocab.js';
+import { Difficulties } from './difficulties.js';
 
 
 const port = process.env.PORT ?? '80';
@@ -11,6 +12,7 @@ app.use(Express.static('static'));
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 app.locals.base = '/vocab'; // TODO make dynamic
+app.locals.difficulties = Difficulties;
 
 // Locale middleware
 app.use((req, res, next) => {
