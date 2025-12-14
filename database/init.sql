@@ -67,3 +67,6 @@ CREATE TRIGGER trg_word_updated_at
 BEFORE UPDATE ON word
 FOR EACH ROW
 EXECUTE FUNCTION set_updated_at();
+
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;

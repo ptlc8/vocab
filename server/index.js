@@ -42,6 +42,12 @@ app.get('/words/:word', async (req, res) => {
     }
 });
 
+// Game route
+app.get('/game', async (req, res) => {
+    const game = await Vocab.getAcquisitionGame();
+    res.render('game', { game });
+});
+
 // 404 handler
 app.use((req, res, _next) => {
     res.status(404).render('error', { message: 'Page non trouvée' });

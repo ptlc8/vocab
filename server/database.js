@@ -8,7 +8,7 @@ const pool = new Pool({
     database: process.env.POSTGRES_DBNAME,
 });
 
-export async function queryDatabase(query, values = undefined) {
+export async function queryMany(query, values = undefined) {
     const client = await pool.connect();
     try {
         const result = await client.query(query, values);
@@ -16,4 +16,9 @@ export async function queryDatabase(query, values = undefined) {
     } finally {
         client.release();
     }
+}
+
+export async function queryOne(query, values = undefined) {
+    const rows = await queryMany(query, values);
+    return rows.length > 0 ? rows[0] : null;
 }
