@@ -6,6 +6,7 @@ services:
       POSTGRES_USERNAME: user
       POSTGRES_PASSWORD: secret
       POSTGRES_DBNAME: vocab
+      DATABASE_URL: postgresql://user:secret@database:5432/vocab?schema=public
       MISTRAL_API_KEY: ${MISTRAL_API_KEY?}
     ports:
       - 80
