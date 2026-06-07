@@ -7,11 +7,12 @@
     <title>Tous les mots</title>
 </head>
 <body>
+    <a href="<%= base %>/">Accueil</a>
     <h1>Tous les mots</h1>
     <ul>
-        <% words.forEach(function(word) { %>
-            <li><a href="<%= base %>/words/<%= word.id %>"><%= word.text %></a></li>
-        <% }); %>
+    <%_ words.forEach(function(word) { _%>
+        <li><a href="<%= base %>/words/<%= word.text %>"><%= word.text %></a></li>
+    <%_ }); _%>
     </ul>
 </body>
 </html>

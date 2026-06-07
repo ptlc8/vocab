@@ -29,7 +29,7 @@ export function extractJsonFromLlmOutput(raw) {
 
     try {
         return JSON.parse(jsonText);
-    } catch (err) {
+    } catch {
         throw new Error(
             `Impossible de parser la réponse du LLM comme du JSON.
       Réponse brute (début) : ${jsonText.slice(0, 500)}`

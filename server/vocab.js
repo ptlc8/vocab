@@ -5,30 +5,33 @@ export async function getWords() {
 }
 
 export async function getWord(wordId) {
-    const word = await queryOne('SELECT * FROM word WHERE id = $1', [wordId]);
+    const word = await queryOne(
+        typeof wordId === 'number' ? 'SELECT * FROM word WHERE id = $1' : 'SELECT * FROM word WHERE text = $1',
+        [wordId]
+    );
     if (!word) return null;
     word.categories = await queryMany(
         `SELECT c.id, c.name FROM word_category wc
         JOIN category c ON wc.category_id = c.id
         WHERE wc.word_id = $1`,
-        [wordId]
+        [word.id]
     );
     word.examples = await queryMany(
         `SELECT id, sentence FROM example
         WHERE word_id = $1`,
-        [wordId]
+        [word.id]
     );
     word.near_words = await queryMany(
         `(SELECT w.id, w.text FROM near_words JOIN word w ON word2_id = w.id WHERE word1_id = $1)
         UNION
         (SELECT w.id, w.text FROM near_words JOIN word w ON word1_id = w.id WHERE word2_id = $1)`,
-        [wordId]
+        [word.id]
     );
     word.confusions = await queryMany(
         `(SELECT w.id, w.text, nuance FROM confusion JOIN word w ON word2_id = w.id WHERE word1_id = $1)
         UNION
         (SELECT w.id, w.text, nuance FROM confusion JOIN word w ON word1_id = w.id WHERE word2_id = $1)`,
-        [wordId]
+        [word.id]
     );
     return word;
 }

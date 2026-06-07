@@ -7,11 +7,12 @@
     <title><%= game.mode %></title>
 </head>
 <body>
+    <a href="<%= base %>/">Accueil</a>
     <h1><%= game.definition %></h1>
     <ul>
-        <% for (const option of game.options) { %>
-            <li><button><%= option.text %></button></li>
-        <% } %>
+    <%_ for (const option of game.options) { _%>
+        <li><button><%= option.text %></button></li>
+    <%_ } _%>
     </ul>
 </body>
 </html>

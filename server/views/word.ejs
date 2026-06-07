@@ -7,8 +7,9 @@
     <title><%= word.text %></title>
 </head>
 <body>
+    <a href="<%= base %>/">Accueil</a>
     <h1><%= word.text %></h1>
-    <% difficulty = difficulties[word.difficulty]; %>
+    <%_ difficulty = difficulties[word.difficulty]; _%>
     <p><b>Difficulté :</b> <span title="<%= difficulty.description %>" style="color: <%= difficulty.color %>;"><%= difficulty.name %></span></p>
     <p><b>Registre :</b> <%= word.register %></p>
     <p><b>Définition courte :</b> <%= word.short_definition %></p>
@@ -17,33 +18,29 @@
     <p><b>Notes :</b> <%= word.notes %></p>
     <p><b>Création :</b> <time datetime="<%= word.created_at.toISOString() %>"><%= word.created_at.toLocaleString(locale) %></time></p>
     <p><b>Modification :</b> <time datetime="<%= word.updated_at.toISOString() %>"><%= word.updated_at.toLocaleString(locale) %></time></p>
-    <p><b>Catégories :</b>
-        <ul>
-        <% word.categories.forEach(category => { %>
-            <li><%= category.name %></li>
-        <% }); %>
-        </ul>
-    </p>
-    <p><b>Exemples :</b> 
-        <ul>
-        <% word.examples.forEach(example => { %>
-            <li><%= example.sentence %></li>
-        <% }); %>
-        </ul>
-    </p>
-    <p><b>Mots proches :</b>
-        <ul>
-        <% word.near_words.forEach(nearWord => { %>
-            <li><a href="<%= base %>/words/<%= nearWord.id %>"><%= nearWord.text %></a></li>
-        <% }); %>
-        </ul>
-    </p>
-    <p><b>Mots confondables :</b>
-        <ul>
-        <% word.confusions.forEach(confusion => { %>
-            <li><a href="<%= base %>/words/<%= confusion.id %>"><%= confusion.text %></a> (<%= confusion.nuance %>)</li>
-        <% }); %>
-        </ul>
-    </p>
+    <p><b>Catégories :</b></p>
+    <ul>
+    <%_ word.categories.forEach(category => { _%>
+        <li><%= category.name %></li>
+    <%_ }); _%>
+    </ul>
+    <p><b>Exemples :</b></p>
+    <ul>
+    <%_ word.examples.forEach(example => { _%>
+        <li><%= example.sentence %></li>
+    <%_ }); _%>
+    </ul>
+    <p><b>Mots proches :</b></p>
+    <ul>
+    <%_ word.near_words.forEach(nearWord => { _%>
+        <li><a href="<%= base %>/words/<%= nearWord.id %>"><%= nearWord.text %></a></li>
+    <%_ }); _%>
+    </ul>
+    <p><b>Mots confondables :</b></p>
+    <ul>
+    <%_ word.confusions.forEach(confusion => { _%>
+        <li><a href="<%= base %>/words/<%= confusion.id %>"><%= confusion.text %></a> (<%= confusion.nuance %>)</li>
+    <%_ }); _%>
+    </ul>
 </body>
 </html>

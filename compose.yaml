@@ -18,6 +18,11 @@ services:
       watch:
         - action: rebuild
           path: server
+          ignore:
+            - views/
+        - action: sync
+          path: server/views
+          target: /app/views
   database:
     image: postgres:18-alpine
     restart: unless-stopped
