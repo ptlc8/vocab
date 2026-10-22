@@ -1,18 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<%= base %>/style.css">
-    <title><%= game.mode %></title>
-</head>
-<body>
-    <a href="<%= base %>/">Accueil</a>
-    <h1><%= game.definition %></h1>
-    <ul>
-    <%_ for (const option of game.options) { _%>
-        <li><button><%= option.text %></button></li>
-    <%_ } _%>
-    </ul>
-</body>
-</html>
+<%- include('partials/header', { title: 'Jeu', nav: 'game' }) %>
+<div id="game-root">
+    <noscript>
+        <p class="page-sub">Le jeu vit dans ton navigateur : active JavaScript pour jouer, ou <a href="<%= base %>/words">parcours les mots</a>.</p>
+    </noscript>
+</div>
+<%- include('partials/footer') %>

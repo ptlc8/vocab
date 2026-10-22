@@ -1,0 +1,73 @@
+<%- include('partials/header', { title: 'Résultat', nav: 'game' }) %>
+<%_
+    const isFrappe = mode === 'frappe' || mode === 'frappe-contexte';
+_%>
+<div
+    class="result-card"
+    data-correct="<%= correct %>"
+    data-target-id="<%= target.id %>"
+    data-target-text="<%= target.text %>"
+    data-difficulty="<%= target.difficulty %>"
+    data-mode="<%= mode %>"
+    data-mode-fixe="<%= modeFixe %>"
+    data-replay-href="<%= replayHref %>"
+    data-categories="<%= JSON.stringify(target.categories.map(c => c.name)) %>"
+    <%_ if (category) { _%>data-category="<%= category %>" <%_ } _%>
+    <%_ if (categoryTotal) { _%>data-category-total="<%= categoryTotal %>" <%_ } _%>
+   
+>
+    <%_ if (correct) { _%>
+    <p class="verdict correct">Bien vu !</p>
+    <p class="verdict-sub">C’était bien <b><%= target.text %></b>.</p>
+    <%_ } else { _%>
+    <p class="verdict incorrect">Raté…</p>
+    <%_ if (isFrappe) { _%>
+    <p class="verdict-sub">Tu as tapé « <%= guess %> ».</p>
+    <%_ } else { _%>
+    <p class="verdict-sub">Tu as choisi <a href="<%= base %>/words/<%= encodeURIComponent(choice.text) %>"><%= choice.text %></a>.</p>
+    <%_ } _%>
+    <%_ } _%>
+    <p class="result-word"><a href="<%= base %>/words/<%= encodeURIComponent(target.text) %>"><%= target.text %></a></p>
+    <%_ if (mode === 'contexte') { _%>
+    <%_ if (sentence) { _%>
+    <p class="result-example"><%= sentence %></p>
+    <%_ } _%>
+    <p class="result-def"><%= definition %></p>
+    <%_ if (nuance) { _%>
+    <div class="nuance-card">
+        <p class="nuance-title">La nuance</p>
+        <p><%= nuance %></p>
+    </div>
+    <%_ } _%>
+    <%_ } else if (mode === 'jumelage') { _%>
+    <p class="result-def"><%= definition %></p>
+    <%_ if (other) { _%>
+    <div class="nuance-card">
+        <p class="nuance-title">Ne pas confondre avec <%= other.text %></p>
+        <p><%= other.short_definition %></p>
+        <%_ if (nuance) { _%>
+        <p class="nuance-text"><%= nuance %></p>
+        <%_ } _%>
+    </div>
+    <%_ } _%>
+    <%_ } else if (isFrappe) { _%>
+    <p class="result-def"><%= definition %></p>
+    <%_ if (sentence) { _%>
+    <p class="result-example"><%= sentence %></p>
+    <%_ } _%>
+    <%_ if (example) { _%>
+    <p class="result-example"><%= example.sentence %></p>
+    <%_ } _%>
+    <%_ } else { _%>
+    <p class="result-def"><%= definition %></p>
+    <p class="result-long"><%= target.long_definition %></p>
+    <%_ if (example) { _%>
+    <p class="result-example"><%= example.sentence %></p>
+    <%_ } _%>
+    <%_ } _%>
+    <div class="result-actions">
+        <a class="btn btn-primary" href="<%= replayHref %>">Rejouer</a>
+        <a class="btn btn-secondary" href="<%= base %>/words/<%= encodeURIComponent(target.text) %>">Voir la fiche</a>
+    </div>
+</div>
+<%- include('partials/footer') %>

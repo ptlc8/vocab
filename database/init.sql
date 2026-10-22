@@ -1,11 +1,14 @@
 CREATE TABLE word (
     id SERIAL PRIMARY KEY,
-    text TEXT NOT NULL UNIQUE,
+    text TEXT NOT NULL,
+    language TEXT NOT NULL DEFAULT 'fr',
+    CONSTRAINT word_language_text_key UNIQUE (language, text),
 
     difficulty SMALLINT NOT NULL CHECK (difficulty BETWEEN 1 AND 5),
 
     register TEXT NOT NULL CHECK (
-        register IN ('familier', 'courant', 'soutenu', 'litteraire', 'technique')
+        (language = 'fr' AND register IN ('familier', 'courant', 'soutenu', 'litteraire', 'technique'))
+        OR (language = 'en' AND register IN ('informal', 'standard', 'formal', 'literary', 'technical'))
     ),
 
     short_definition TEXT NOT NULL,

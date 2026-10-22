@@ -10,21 +10,27 @@ L’objectif n’est pas l’accumulation mécanique de mots, mais leur **approp
 ## Modes de jeu
 
 ### 🧠 Acquisition lexicale
+
 Ce mode constitue le socle du jeu.
 
-Le joueur est confronté à de nouveaux mots, présentés avec leurs définitions, parfois mises en tension par des propositions voisines ou des formulations piégeuses. Selon les variantes, il peut s’agir de :
-- retrouver le mot à partir de sa définition,
-- identifier la définition correcte d’un mot donné,
-- reconnaître l’usage approprié d’un terme dans un contexte précis.
+Le joueur est confronté à de nouveaux mots, présentés avec leurs définitions, parfois mises en tension par des propositions voisines ou des formulations piégeuses. Chaque mode existe en trois formes :
+
+- **normale** — retrouver le mot à partir de sa définition,
+- **inversée** — identifier la définition correcte d’un mot donné,
+- **avancée (frappe)** — retrouver le mot en le tapant : une faute de frappe passe, un autre mot non.
+
+La distinction sémantique existe aussi en trois formes : reconnaître l’usage approprié d’un terme dans un contexte précis (normale), associer un mot à sa définition spécifique face à son confondable (inversée), et taper le mot juste qu’appelle le contexte (avancée).
 
 Chaque réussite renforce la familiarité avec le mot ; les échecs, eux, déclenchent des rappels ultérieurs afin d’ancrer durablement le sens.
 
 ---
 
 ### ⚖️ Distinction sémantique
+
 Ce mode est dédié à l’exploration des **nuances lexicales**.
 
 Deux mots proches — synonymes imparfaits, faux jumeaux, termes souvent confondus — sont mis en regard. Le joueur doit :
+
 - discerner leurs différences de sens,
 - choisir le mot le plus juste selon un contexte donné,
 - associer chaque mot à sa définition spécifique.
@@ -37,22 +43,49 @@ Ce mode vise à affiner la précision expressive et à développer une sensibili
 
 Le jeu s’organise autour d’une gradation lexicale, où chaque palier introduit des mots perçus comme plus abstraits, plus rares ou plus marqués stylistiquement :
 
-- **Basique** — vocabulaire courant, immédiatement accessible  
-- **Usuel** — lexique standard, légèrement plus précis ou abstrait  
-- **Soutenu** — termes fréquents dans l’écrit exigeant ou la presse de fond  
-- **Littéraire** — vocabulaire rare, expressif, souvent marqué stylistiquement  
-- **Érudit** — mots savants, académiques ou d’origine savante, à forte densité conceptuelle  
+- **Basique** — vocabulaire courant, immédiatement accessible
+- **Usuel** — lexique standard, légèrement plus précis ou abstrait
+- **Soutenu** — termes fréquents dans l’écrit exigeant ou la presse de fond
+- **Littéraire** — vocabulaire rare, expressif, souvent marqué stylistiquement
+- **Érudit** — mots savants, académiques ou d’origine savante, à forte densité conceptuelle
 
 La progression s’effectue naturellement, en fonction des réussites du joueur.
 
+### Bandes et catégories
+
+La progression (locale au navigateur, localStorage, une clé par langue) vit par catégorie.
+Chaque bonne réponse renforce le mot (boîtes : 8 h, 1 j, 3 j, 7 j, 30 j ; une erreur renvoie
+le mot à la boîte 0, à revoir dans 10 minutes). Quand deux mots d'une même catégorie, d'une
+même bande (difficulté 1 à 5), atteignent la boîte 2, la bande est acquise : le niveau de la
+catégorie est sa plus haute bande, sans régression possible. L'accueil montre les catégories
+et leurs niveaux ; le lien _Rejouer_ d'une partie avec catégorie rebat sur la bande du niveau
+(une chance sur quatre d'explorer la bande suivante), la mémoire primant : un mot à revoir
+repart avant tout. Une catégorie sans mot de la bande demandée est complétée discrètement
+hors catégorie, le tirage reste juste.
+
 ---
+
+## Équilibrage de la base
+
+Les niveaux 4 et 5 se remplissent plus lentement que le reste (le LLM propose naturellement
+des mots courants ou usuels). Pour rééquilibrer :
+
+```bash
+npm run generate -- 14 fr --niveau 4-5   # uniquement des mots littéraires à érudit
+npm run generate -- 10 en --niveau=5     # forme longue acceptée
+```
+
+L’option `--niveau` (`--level` en alias) accepte un niveau unique (`4`) ou une fourchette
+(`4-5`, `4à5`).
 
 ## Idées annexes
 
 ### 📚 Collection de mots
+
 Chaque mot correctement assimilé peut être intégré à une **collection personnelle**.
 
-Ces collections sont organisées par **catégories thématiques ou stylistiques** (émotions, abstractions, vocabulaire littéraire, etc.) et se débloquent progressivement au fil des réussites. Elles servent à la fois de :
+Ces collections sont organisées par **catégories thématiques ou stylistiques** (émotions, abstractions, vocabulaire littéraire, etc.) et montent en niveau au fil des réussites. Elles servent à la fois de :
+
 - trace visible de la progression,
 - outil de révision ciblée,
 - incitation à explorer des champs lexicaux plus exigeants.
@@ -60,3 +93,23 @@ Ces collections sont organisées par **catégories thématiques ou stylistiques*
 ---
 
 **Vocab** se veut à la fois jeu et atelier linguistique : un espace où l’on apprend à manier les mots avec justesse, élégance et discernement.
+
+---
+
+## Développement
+
+Stack : Node (Express 5 + EJS), PostgreSQL 18 (+ `pg_trgm`), génération lexicale par LLM — Mistral, OpenAI ou Fireworks au choix.
+
+```bash
+# .env à la racine (gitignoré) :
+# MISTRAL_API_KEY=…
+
+docker compose up -d --build
+docker compose exec -T database psql -U user -d vocab < database/sample.sql
+
+docker compose exec server npm run generate -- 20
+```
+
+- `npm run generate -- N` (dans `server/`, ou via `docker compose exec server`) : génère une liste de N mots par LLM, les insère en base (transactionnel, idempotent) avec catégories, exemples, mots proches et confusions ; les partenaires manquants sont générés en cascade (limite : 2 × N).
+- `LLM_PROVIDER` : `mistral`, `openai` ou `fireworks` (défaut : mistral si `MISTRAL_API_KEY` est définie, sinon openai). Le modèle est ajustable via `MISTRAL_MODEL` / `FIREWORKS_MODEL`.
+- `BASE_PATH` (défaut : `/vocab`) : préfixe des liens générés — mettre vide en local (`BASE_PATH= docker compose up`) si l’app n’est pas derrière un proxy qui retire le préfixe.
